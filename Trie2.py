@@ -1,6 +1,6 @@
 class Node:
     def __init__(self):
-        self.Child=[None for i in range(26)]
+        self.child=[None for i in range(26)]
         self.eow=False
 
 class Trie:
@@ -10,20 +10,20 @@ class Trie:
         curr=self.root
         for i in range(0,len(word)):
             p=ord(word[i])-ord("a")
-            if curr.Child[p]==None:
-                curr.Child[p]=Node()
+            if curr.child[p]==None:
+                curr.child[p]=Node()
             if i ==len(word)-1:
-                curr.Child[p].eow=True
-            curr=curr.Child[p]
+                curr.child[p].eow=True
+            curr=curr.child[p]
     def findaWord(self,word):
         curr=self.root
         for i in range(len(word)):
             ind=ord(word[i])-ord("a")
-            if curr.Child[ind]==None:
+            if curr.child[ind]==None:
                 return False
-            if i==len(word)-1 and curr.Child[ind].eow==False:
+            if i==len(word)-1 and curr.child[ind].eow==False:
                 return False
-            curr=curr.Child[ind]
+            curr=curr.child[ind]
         return True
     def wordBreak(self,key):
         if len(key)==0:
@@ -38,10 +38,22 @@ class Trie:
         curr = self.root
         for i in range(len(pre)):
             ind = ord(pre[i]) - ord("a")
-            if curr.Child[ind] == None:
+            if curr.child[ind] == None:
                 return False
-            curr = curr.Child[ind]
+            curr = curr.child[ind]
         return True
+    def countalluniqueSubstring(self,roo):
+        if roo==None:
+            return 0
+        count=0
+        for i in range(0,26):
+            if roo.child[i]!=None:
+                count+=self.countalluniqueSubstring(roo.child[i])
+        return count+1
+    def printcount(self):
+        pp=self.root
+        k=self.countalluniqueSubstring(pp)
+        print(k)
 
 
 
@@ -49,21 +61,10 @@ class Trie:
 
 
 p1=Trie()
-p1.insertinTrie("i")
-p1.insertinTrie("like")
-p1.insertinTrie("sam")
-p1.insertinTrie("samsung")
-p1.insertinTrie("mobile")
-if p1.findaWord("any"):
-    print("found")
-else:
-    print("NOt Found")
-
-if p1.wordBreak("ilikesamsung"):
-    print("Word Break Is sunccesFull")
-else:
-    print("Word Break Not Possible")
-if p1.checkPrefix("samx"):
-    print("Prefix Exist")
-else:
-    print("prefix Doesn't Exist")
+key="ababac"
+word=set()
+for i in range(0,len(key)):
+        word.add(key[i:])
+        p1.insertinTrie(key[i:])
+print(word)
+p1.printcount()
